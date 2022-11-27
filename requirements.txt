@@ -1,0 +1,2 @@
+pefile
+boto3
