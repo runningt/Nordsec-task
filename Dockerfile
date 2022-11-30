@@ -8,6 +8,6 @@ FROM openjdk:${OPENJDK_VERSION}-${IMAGE_VARIANT}
 COPY --from=py310 / /
 
 ARG PYSPARK_VERSION=3.2.0
-RUN pip --no-cache-dir install pyspark==${PYSPARK_VERSION} jupyter-notebook ipython
+RUN pip --no-cache-dir install pyspark==${PYSPARK_VERSION} jupyterlab notebook ipython
 
 ENTRYPOINT ["ipython"]
