@@ -33,4 +33,4 @@ services:
         #      - PYSPARK_SUBMIT_ARGS=--packages io.delta:delta-core_2.12:1.2.1,org.apache.spark:spark-avro_2.12:2.4.4 pyspark-shell
     ports:
       - '8889:8888'
-        #    command: /bin/bash -c "while sleep 1000; do :; done"
+    command: /bin/bash -c "while sleep 1000; do :; done"
