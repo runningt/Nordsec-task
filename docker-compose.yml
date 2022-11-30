@@ -5,13 +5,15 @@ services:
     build: .
     volumes:
       - ./.jupyter:/root/.jupyter
+      - .:/src
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-        #      - PYSPARK_SUBMIT_ARGS=--packages io.delta:delta-core_2.12:1.2.1,org.apache.spark:spark-avro_2.12:2.4.4 pyspark-shell
+      - PYSPARK_SUBMIT_ARGS=--packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1 pyspark-shell
+
     ports:
       - '8080:8080'
       - '7077:7077'
@@ -21,6 +23,7 @@ services:
     build: .
     volumes:
       - ./.jupyter:/root/.jupyter
+      - .:/src
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark:7077
@@ -30,6 +33,7 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
+            - PYSPARK_SUBMIT_ARGS=--packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1 pyspark-shellj
         #      - PYSPARK_SUBMIT_ARGS=--packages io.delta:delta-core_2.12:1.2.1,org.apache.spark:spark-avro_2.12:2.4.4 pyspark-shell
     ports:
       - '8889:8888'

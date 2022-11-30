@@ -13,7 +13,7 @@ S3_REGION = 'eu-central-1'
 class S3FileReader:
 
     def __init__(self, s3_bucket=S3_BUCKET, region=S3_REGION):
-        self.clie   nt = boto3.client('s3', aws_access_key_id='', aws_secret_access_key='', region_name=region)
+        self.client = boto3.client('s3', aws_access_key_id='', aws_secret_access_key='', region_name=region)
         # This is a "hack" to skip signing of S3 requests, as s3-nord-challenge-data does not require
         # aws_acecess_key_id and aws_secret_access_key for reading
         self.client._request_signer.sign = (lambda *args, **kwargs: None)

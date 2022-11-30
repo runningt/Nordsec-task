@@ -1,3 +1,4 @@
 pefile
 boto3
-pytests
+pytest
+
