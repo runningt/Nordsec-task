@@ -450,7 +450,9 @@ c.NotebookApp.ip = '0.0.0.0'
 #          Setting to an empty string disables authentication altogether, which
 #  is NOT RECOMMENDED.
 #  Default: '<generated>'
-#c.NotebookApp.token = ''
+#  NOTE: skipping authentication is NOT RECOMMENDED
+#  although for test task purposes inside docker this shouldn't be a problem
+c.NotebookApp.token = ''
 
 
 ## Supply overrides for the tornado.web.Application that the Jupyter notebook
