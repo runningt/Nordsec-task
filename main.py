@@ -19,7 +19,7 @@ class S3FileReader:
         self.client._request_signer.sign = (lambda *args, **kwargs: None)
 
         self.bucket = s3_bucket
-        return self.client
+
 
 
     def list_files_with_size(self, prefix):
@@ -72,6 +72,7 @@ class PeParser:
         self.exports = -1
         self.architecture = None
         self.headers_read = 0
+        self.meta_parsed = False
         
     def read_headers(self):
         """
@@ -192,7 +193,33 @@ class PeParser:
         except AttributeError:
             self.imports = -1
 
+    def parse_all_meta(self):
+        """
+        parse all meta from file stream
+        """
+        self.meta_parsed= True
+        self.read_headers()
+        self.get_architecture()
+        self.guess_size_and_read()
+        self.get_imports_exports()
 
+    def get_all_meta(self):
+        """
+        Parse meta (if required) and get tuple containing (path, size, type, architecture, meta, imports, exports)
+        """
+        if not self.meta_parsed:
+            self.parse_all_meta()
+        return (self.path, self.size, self.extension, self.architecture, self.imports, self.exports)
+
+
+    def get_short_meta(self):
+
+        """
+        Parse meta (if required) and get tuple containing ( architecture, imports, exports)
+        """
+        if not self.meta_parsed:
+            self.parse_all_meta()
+        return (self.architecture, self.imports, self.exports)
 
 
 
