@@ -27,18 +27,19 @@
   -  Catalog 1 - Malware - real
 
 ### Solution
-   - main.py contain PeParser and S3FileReader
-     - PeParser parses specific file (given file stream) and gets apropriate Metadata (see Metadata section)
-     -  S3FileReader gets stream containing specific file from S3.
+   - `pe_parser.py` contain PeParser class definition. PeParser parses specific file (given file stream) and gets apropriate Metadata (see Metadata section)
+   - `s3file_reader.py` contains S3FileReader class definition. It is used fot getting file object containing specific file from S3.
 
    - WIP: NordTask.ipynb - Jupyter notebook that contains steps to read file list, create spark DF from it, process files to get appropriate meta
-   - NordTask.ipynb markdown sections contains info about choosen solution approache
+   - NordTask.ipynb markdown sections contains info about choosen solution approach
    - TODO:
         - docker container with database 
-	- store in database
+        - store in database
         - omit preprocessed data
-	- tests
-    	
+        - tests 
+        - move logic from jupyter notebook into spark code in python file 
+        
+            
 
 ## Build
 docker compose up

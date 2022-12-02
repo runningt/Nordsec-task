@@ -1,4 +1,4 @@
 pefile
 boto3
 pytest
-
+botocore
