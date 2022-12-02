@@ -5,12 +5,14 @@ import pefile
 import os
 import io
 
-#TODO: consider reading using smart_open
+
 
 S3_BUCKET = 's3-nord-challenge-data'
 S3_REGION = 'eu-central-1'
 
 class S3FileReader:
+    # TODO: Get rid of boto if possible
+    # TODO: consider reading using smart_open or using native spark libraries
 
     def __init__(self, s3_bucket=S3_BUCKET, region=S3_REGION):
         self.client = boto3.client('s3', aws_access_key_id='', aws_secret_access_key='', region_name=region)
@@ -19,7 +21,6 @@ class S3FileReader:
         self.client._request_signer.sign = (lambda *args, **kwargs: None)
 
         self.bucket = s3_bucket
-
 
 
     def list_files_with_size(self, prefix):
@@ -100,15 +101,17 @@ class PeParser:
         You just need to read enough to have IMPORT and EXPORT data,
         The problem is that there are different places where this data is set
         sometimes its .edata and .idata section, sometimes one (or both) sections are missing
-        So we determine size to rtead following way:
-            max possible is size_of_file (as reported by s3)
-
-
-
+        So we determine size to read following way:
+            - max possible is size_of_file (as reported by s3)
+            - check file apropriate section sizes
+            - check virtual addresses and size of import and export sections in
+            HEADER_DATA_DIRECTORY (yes I do know VirtualAddress is address in memory after loading data,
+            but I believe its higher or equal than actuall offset in file)
+            - get minimum of above values
         :return:
         """
         if not self.pe_headers:
-            raise AttributeError("pe file headers shoult be read first")
+            raise AttributeError("pe file headers should be read first")
         try:
             import_entry_header = self.pe_headers.OPTIONAL_HEADER.DATA_DIRECTORY[1]
             export_entry_header = self.pe_headers.OPTIONAL_HEADER.DATA_DIRECTORY[0]
