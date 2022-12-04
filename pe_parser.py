@@ -127,13 +127,13 @@ class PeParser:
     def get_architecture(self):
         """
         Get architercutre
-        :return: None
+        :return: Architecture "32" or "64"
         """
 
         if self.pe_headers.PE_TYPE == pefile.OPTIONAL_HEADER_MAGIC_PE:
-            self.architecture = 32
+            self.architecture = "32"
         elif self.pe_headers.PE_TYPE == pefile.OPTIONAL_HEADER_MAGIC_PE_PLUS:
-            self.architecture = 64
+            self.architecture ="64"
         else:
             raise ValueError("INCORECT PE_TYPE")
 
