@@ -18,6 +18,7 @@ class PeParser:
         :param file_data: file stream
         :param size: size of file as reported by boto3 (s3)
         """
+        print(f"path={path}, file_data={file_data}, size={size}")
         self.path = path
         self.data = file_data
         self.data_position = 0

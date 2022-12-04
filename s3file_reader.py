@@ -18,7 +18,7 @@ class S3FileReader:
         self.bucket = s3_bucket
 
 
-    def list_files_with_size(self, prefix):
+    def list_files_with_size(self, prefix=""):
         """List objects in s3 bucket with specific prefix (if given)"""
         paginator = self.client.get_paginator('list_files')
         pages = paginator.paginate(Bucket=self.bucket, Prefix=prefix)
@@ -33,6 +33,7 @@ class S3FileReader:
         :param range_bytes:limit length of file
         :return: file stream
         """
+        return ""
         if range_bytes:
             return self.client.get_object(Bucket=self.bucket, key=key, range=f'bytes=0-{range_bytes}').get['Body']
         else:
