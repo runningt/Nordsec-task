@@ -33,11 +33,11 @@
    - WIP: NordTask.ipynb - Jupyter notebook that contains steps to read file list, create spark DF from it, process files to get appropriate meta
    - NordTask.ipynb markdown sections contains info about choosen solution approach
    - TODO:
-        - docker container with database 
-        - store in database
-        - omit preprocessed data
-        - tests 
-        - move logic from jupyter notebook into spark code in python file 
+        [x] docker container with database 
+        [x] store in database
+        [x] omit preprocessed data
+        [] tests (In progress - finished `pe_parser` tests
+        [] move logic from jupyter notebook into spark code in python file 
         
             
 
