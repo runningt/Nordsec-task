@@ -50,6 +50,7 @@ class TestPeParser:
         sample_exe_peparser.read_headers()
         sample_exe_peparser.get_architecture()
         assert  sample_exe_peparser.architecture == '64'
+
     def test_guess_size_and_read(self, sample_exe_peparser):
         sample_exe_peparser.read_headers()
         assert sample_exe_peparser.guess_size_and_read() == sample_exe_peparser.data_position
@@ -76,8 +77,6 @@ class TestPeParser:
 
 
     def test_corrupted_peparser_read_headers(self, corrupted_file_peparser):
-        #assert corrupted_file_peparser.size == corrupted_file_peparser.param
-        #assert corrupted_file_peparser.path == SAMPLE_CORRUPTED_DLL_PATH
         with pytest.raises(ValueError):
             corrupted_file_peparser.read_headers()
         assert corrupted_file_peparser.corrupted
