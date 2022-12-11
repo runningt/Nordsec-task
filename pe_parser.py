@@ -18,6 +18,7 @@ class PeParser:
         """
         self.path = path
         self.data = file_data
+        print(self.data)
         self.data_position = 0
         self.local_stream = io.BytesIO()
         self.dir = os.path.dirname(self.path)
@@ -39,10 +40,10 @@ class PeParser:
         """
         if self.data_position > 0:
             raise IndexError("Headers already read")
-        data = -1
-        while not self.pe_headers and self.headers_read < self.headers_max_size and data:
-            data = self.data.read(self.headers_default_size)
-            self.local_stream.write(data)
+        data_len = -1
+        while not self.pe_headers and self.headers_read < self.headers_max_size and data_len:
+            data_len = self.data.read(self.headers_default_size)
+            self.local_stream.write(data_len)
             self.headers_read+=self.headers_default_size
             self.data_position = self.local_stream.tell()
             self.local_stream.seek(0)

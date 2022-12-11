@@ -33,8 +33,7 @@ class S3FileReader:
         :param range_bytes:limit length of file
         :return: file stream
         """
-        return ""
         if range_bytes:
-            return self.client.get_object(Bucket=self.bucket, key=key, range=f'bytes=0-{range_bytes}').get['Body']
+            return self.client.get_object(Bucket=self.bucket, Key=key, Range=f'bytes=0-{range_bytes}').get('Body')
         else:
-            return self.client.get_object(Bucket=self.bucket, key=key).get('Body')
+            return self.client.get_object(Bucket=self.bucket, Key=key).get('Body')
