@@ -1,4 +1,6 @@
+pyspark
 pefile
 boto3
 pytest
 botocore
+notebook
