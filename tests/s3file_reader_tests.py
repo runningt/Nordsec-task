@@ -16,8 +16,8 @@ class Test_S3FileReader:
         assert reader.client.meta.region_name == TEST_S3_REGION
 
     @pytest.mark.parametrize("get_stream_params", (
-            {"key":"TEST_KEY"},
-            {"key":"TEST_KEY", "range_bytes":22}
+            {"key": "TEST_KEY"},
+            {"key": "TEST_KEY", "range_bytes": 22}
     )
     )
 
