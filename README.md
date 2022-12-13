@@ -84,12 +84,25 @@ As I am not able to test on a large set of data and big enough spark cluster whi
 
 I was also considering one more approach, which however I could not find any good way to implement. So my idea was to create a dataframe similar to the one created by `spark.read.format('binaryFile').option("pathGlobFilter","<path-glob>").load(<s3-bucket>)`, but which contain only prefix of file (first 1024 or 2048 bytes). This way we could have a Dataframe(path, mod time,  length, PE headers), we could process the header of file to get all required PE metadata apart from imports/expors and in next step we could load apropriate sections of file to get imports/exports.
 
+## Development
+### Pre-commit hooks
+pre-commit hooks are available to execute black, isort and flake8 on commited files
+To enable pre-commit hooks run
+`$ pre-commit install`
+
+### Tests
+To run tests:
+`$ py.test tests`
+
+### CI/CD
+- TODO
 
 ## Build
-`docker compose up`
+`$ docker compose up`
 
 ## Run
-`spark-submit --files=src/config.yml --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1.0 src/process_pefiles.py 100`
+`$ cd src
+$ spark-submit --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1.0 process_pefiles.py 100`
 
 Note: number of files to process is the only argument of `process_pefiles.py` script
 
@@ -107,5 +120,5 @@ Note: number of files to process is the only argument of `process_pefiles.py` sc
 ## TODO:
 - CI/CD pipelines
 - get rid of boto3 from `s3file_reader.py`
-- propper logging
+- propper logging (instead of prints)
 - check redis entry per each file during transformation instead of getting all processed files into dataframe (see #### "hybrid" approach - caching)

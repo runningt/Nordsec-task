@@ -19,7 +19,6 @@ class PeParser:
         """
         self.path = path
         self.data = file_data
-        print(self.data)
         self.data_position = 0
         self.local_stream = io.BytesIO()
         self.dir = os.path.dirname(self.path)

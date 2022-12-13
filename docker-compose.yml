@@ -13,32 +13,31 @@ services:
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
       - PYSPARK_SUBMIT_ARGS= --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1.0 pyspark-shell
-
     ports:
       - '8080:8080'
       - '7077:7077'
       - '8888:8888'
       - '4040:4040'
 
-# spark-worker:
-#    build: .
-#    volumes:
-#      - ./.jupyter:/root/.jupyter
-#      - .:/src
-#    environment:
-#      - SPARK_MODE=worker
-#      - SPARK_MASTER_URL=spark://spark:7077
-#      - SPARK_WORKER_MEMORY=1G
-#      - SPARK_WORKER_CORES=1
-#      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-#      - SPARK_RPC_ENCRYPTION_ENABLED=no
-#      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-#      - SPARK_SSL_ENABLED=no
-#            - PYSPARK_SUBMIT_ARGS= --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis:2.4.0 pyspark-shell
-#    ports:
-#      - '8889:8888'
-#      - '7077:7077'
-#    command: /bin/bash -c "while sleep 1000; do :; done"
+  spark-worker:
+    build: .
+    volumes:
+      - ./.jupyter:/root/.jupyter
+      - .:/src
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+            - PYSPARK_SUBMIT_ARGS= --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis:2.4.0 pyspark-shell
+    ports:
+      - '8889:8888'
+      - '7078:7077'
+    command: /bin/bash -c "while sleep 1000; do :; done"
 
   db:
     image: mysql
