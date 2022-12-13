@@ -27,10 +27,10 @@
   -  Catalog 1 - Malware - real
 
 ## Solution
-   - `pe_parser.py` contain `PeParser` class definition. PeParser parses specific file (given file stream) and gets apropriate Metadata (see Metadata section)
+   - `pe_parser.py` contain `PeParser` class definition. PeParser parses specific file (given file stream) and gets appropriate Metadata (see Metadata section)
    - `s3file_reader.py` contain `S3FileReader` class definition. It is used fot getting file object containing specific file from S3.
    - `utils.py` contains `ConfigurationDict` and `parse_file` transformation function definition
-   - `process_pefiles.py` contains pyspark script to to get file list, create spark DF from it, process files to get appropriate meta, store in sql and redis
+   - `process_pefiles.py` contains pyspark script to get file list, create spark DF from it, process files to get appropriate meta, store in sql and redis
    - `NordTask.ipynb` - Jupyter notebook contains the same steps as `process_pefiles.py`
 
 ### Solution notes:
