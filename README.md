@@ -85,11 +85,10 @@ I was also considering one more approach, which however I could not find any goo
 `docker compose up`
 
 ## Run
-`spark-submit --verbose --files=config.yml --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1 process_pefiles.py 100`
+`spark-submit --files=src/config.yml --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1 src/process_pefiles.py 100`
 
 Note: number of files to process is the only argument of `process_pefiles.py` script
 
-TODO: missing jars packages
 
 ## Jupyter Notebook
 - Run jupyter notebook on http://localhost:8888 (no token required)

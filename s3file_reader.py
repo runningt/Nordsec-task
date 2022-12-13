@@ -11,7 +11,6 @@ class S3FileReader:
 
     def __init__(self, s3_bucket=S3_BUCKET, region=S3_REGION):
         self.client = boto3.client("s3", config=Config(signature_version=UNSIGNED), region_name=region)
-
         self.bucket = s3_bucket
 
     def get_file_stream(self, key, range_bytes=0):

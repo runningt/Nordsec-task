@@ -14,7 +14,7 @@ parser.add_argument("N", nargs="?", help="number of files to proceed", default=1
 args = parser.parse_args()
 # Config
 try:
-    with open("config.yml") as stream:
+    with open("src/config.yml") as stream:
         yaml_config = ConfigurationDict(yaml.safe_load(stream))
 except:
     yaml_config = ConfigurationDict()
@@ -24,8 +24,8 @@ except:
 if args.N:
     num_of_files = int(args.N)
 else:
-    num_of_files = 102
-print(num_of_files)
+    num_of_files = 10
+print(f"Number of files to proceed: {num_of_files}")
 
 
 # set up spark
@@ -103,7 +103,8 @@ filesDF = filesDF.subtract(redis_files_info)
 
 # Process files
 schema_with_meta = StructType(
-    filesDF.schema.fields + [
+    filesDF.schema.fields
+    + [
         StructField("architecture", StringType(), True),
         StructField("imports", IntegerType(), True),
         StructField("exports", IntegerType(), True),
