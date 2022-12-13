@@ -27,20 +27,14 @@
   -  Catalog 1 - Malware - real
 
 ## Solution
-   - `pe_parser.py` contain PeParser class definition. PeParser parses specific file (given file stream) and gets apropriate Metadata (see Metadata section)
-   - `s3file_reader.py` contains S3FileReader class definition. It is used fot getting file object containing specific file from S3.
-
-   - WIP: NordTask.ipynb - Jupyter notebook that contains steps to read file list, create spark DF from it, process files to get appropriate meta
-   - NordTask.ipynb markdown sections contains info about choosen solution approach
-   - DONE:
-      - [x] docker container with database 
-      - [x] store in database
-      - [x] omit preprocessed data
-      - [x] tests
-     TODO:
-      - [] move logic from jupyter notebook into spark code in python file 
+   - `pe_parser.py` contain `PeParser` class definition. PeParser parses specific file (given file stream) and gets apropriate Metadata (see Metadata section)
+   - `s3file_reader.py` contain `S3FileReader` class definition. It is used fot getting file object containing specific file from S3.
+   - `utils.py` contains `ConfigurationDict` and `parse_file` transformation function definition
+   - `process_pefiles.py` contains pyspark script to to get file list, create spark DF from it, process files to get appropriate meta, store in sql and redis
+   - `NordTask.ipynb` - Jupyter notebook contains the same steps as `process_pefiles.py`
 
 ### Solution notes:
+
 #### Database
 I was considering SQL and NoSQL (key/value store) to store files info. Finally **Hybrid approach was used**
 
@@ -91,10 +85,18 @@ I was also considering one more approach, which however I could not find any goo
 `docker compose up`
 
 ## Run
-`spark-submit --verbose --files=config.yml  process_pefiles_pyspark.py --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1`
+`spark-submit --verbose --files=config.yml --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1 process_pefiles.py 100`
+
+Note: number of files to process is the only argument of `process_pefiles.py` script
+
 TODO: missing jars packages
 
 ## Jupyter Notebook
 - Run jupyter notebook on http://localhost:8888 (no token required)
 - Open and run /src/NordTask.ipynb in jupyter notebook
-- All steps required
+- Contains all steps required to process pefiles:
+  - get file list 
+  - create spark DF 
+  - process files to get appropriate meta
+  - store in sql and redis
+

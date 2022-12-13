@@ -5,8 +5,11 @@ import yaml
 from utils import ConfigurationDict
 from functools import partial
 from utils import parse_file
-from pyspark.sql.types import StructType,StructField, StringType, IntegerType
-
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("N", nargs="?", help="number of files to proceed", default=100)
+args = parser.parse_args()
 # Config
 try:
     with open("config.yml") as stream:
@@ -14,8 +17,13 @@ try:
 except:
     yaml_config = ConfigurationDict()
 
-# number of files to process - will be read as input
-num_of_files = yaml_config.get("app.num_of_files", 100)
+# number of files to process - get from script argument input
+
+if args.N:
+    num_of_files = int(args.N)
+else:
+    num_of_files = 102
+print(num_of_files)
 
 
 # set up spark
