@@ -1,7 +1,5 @@
 app:
   name: NORD_Task
-  num_of_files: 100
-
 
 spark:
   master: "local[*]"

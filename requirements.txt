@@ -1,7 +1,11 @@
-pyspark
+#pyspark
 pefile
 boto3
 pytest
 botocore
 notebook
 PyYAML
+black
+isort
+flake8
+pre-commit

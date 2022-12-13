@@ -1,6 +1,9 @@
+from collections import UserDict
+
 from pe_parser import PeParser
 from s3file_reader import S3FileReader
-from collections import UserDict
+
+
 def parse_file(row, bucket, region):
     """
     This is a function that is applied using rdd map to each file in Dataframe.
@@ -14,8 +17,8 @@ def parse_file(row, bucket, region):
     """
 
     reader = S3FileReader(bucket, region)
-    path = row['path'].lstrip("/")
-    size = row['size']
+    path = row["path"].lstrip("/")
+    size = row["size"]
     parser = PeParser(path, reader.get_file_stream(path), size)
     try:
         return (*row, *parser.get_short_meta())
@@ -33,6 +36,7 @@ class ConfigurationDict(UserDict):
     redis_home = config["spark.redis.home"] or config.get("spark.redis.home")
     redis_port = config["spark.redis.port"] or config.get("spark.redis.port")
     """
+
     def __getitem__(self, key):
         if "." not in key or key in self:
             return super().__getitem__(key)

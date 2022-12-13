@@ -8,7 +8,8 @@ class PeParser:
     headers_default_size = 1024
 
     # This is my assumption, above this size file is treated as corrupted
-    headers_max_size = 8*1024
+    headers_max_size = 8 * 1024
+
     def __init__(self, path, file_data, size):
         """
 
@@ -44,19 +45,17 @@ class PeParser:
         while not self.pe_headers and self.headers_read < self.headers_max_size and data_len:
             data_len = self.data.read(self.headers_default_size)
             self.local_stream.write(data_len)
-            self.headers_read+=self.headers_default_size
+            self.headers_read += self.headers_default_size
             self.data_position = self.local_stream.tell()
             self.local_stream.seek(0)
 
             try:
                 self.pe_headers = pefile.PE(data=self.local_stream.read(), fast_load=True)
-            except pefile.PEFormatError as ex:
+            except pefile.PEFormatError:
                 self.pe_headers = None
         if not self.pe_headers or self.pe_headers.OPTIONAL_HEADER.SizeOfHeaders > self.headers_read:
             self.corrupted = True
             raise ValueError("PE File is corrupted")
-
-
 
     def guess_size_and_read(self):
         """
@@ -79,9 +78,13 @@ class PeParser:
         try:
             import_entry_header = self.pe_headers.OPTIONAL_HEADER.DATA_DIRECTORY[1]
             export_entry_header = self.pe_headers.OPTIONAL_HEADER.DATA_DIRECTORY[0]
-            sections =  self.pe_headers.sections
-            size_with_sections = self.pe_headers.DOS_HEADER.sizeof() + self.pe_headers.NT_HEADERS.sizeof() + self.pe_headers.OPTIONAL_HEADER.sizeof()
-        except AttributeError as x:
+            sections = self.pe_headers.sections
+            size_with_sections = (
+                self.pe_headers.DOS_HEADER.sizeof()
+                + self.pe_headers.NT_HEADERS.sizeof()
+                + self.pe_headers.OPTIONAL_HEADER.sizeof()
+            )
+        except AttributeError:
             self.corrupted = True
             self.imports = -1
             self.exports = -1
@@ -92,9 +95,9 @@ class PeParser:
         if not export_entry_header.VirtualAddress or not export_entry_header.Size:
             self.exports = 0
 
-        section_indexes = {s.Name.strip(b'\x00'):i for i,s in enumerate(sections)}
-        idata_index = section_indexes.get(b'.idata', -2)
-        edata_index = section_indexes.get(b'.edata', -2)
+        section_indexes = {s.Name.strip(b"\x00"): i for i, s in enumerate(sections)}
+        idata_index = section_indexes.get(b".idata", -2)
+        edata_index = section_indexes.get(b".edata", -2)
         last_index = max(idata_index, edata_index)
 
         size_with_sections += sum(x.SizeOfRawData for x in self.pe_headers.sections[:last_index])
@@ -108,14 +111,14 @@ class PeParser:
 
         read_size = min(read_size_min, self.size)
         for size in sorted({read_size, self.size}):
-            self.local_stream.write(self.data.read(size-self.data_position))
+            self.local_stream.write(self.data.read(size - self.data_position))
             self.data_position = self.local_stream.tell()
             self.local_stream.seek(0)
             try:
                 self.pe = pefile.PE(data=self.local_stream.read(), fast_load=False)
                 if self.imports != 0:
                     self.pe.DIRECTORY_ENTRY_IMPORT
-                if self.exports !=0:
+                if self.exports != 0:
                     self.pe.DIRECTORY_ENTRY_EXPORTS
             except AttributeError:
                 continue
@@ -135,13 +138,10 @@ class PeParser:
         if self.pe_headers.PE_TYPE == pefile.OPTIONAL_HEADER_MAGIC_PE:
             self.architecture = "32"
         elif self.pe_headers.PE_TYPE == pefile.OPTIONAL_HEADER_MAGIC_PE_PLUS:
-            self.architecture ="64"
+            self.architecture = "64"
         else:
             self.corrupted = True
             raise ValueError("INCORECT PE_TYPE")
-
-
-
 
     def get_imports_exports(self):
         """
@@ -177,7 +177,6 @@ class PeParser:
         if not self.meta_parsed:
             self.parse_all_meta()
         return self.path, self.size, self.extension, self.architecture, self.imports, self.exports
-
 
     def get_short_meta(self):
         """
