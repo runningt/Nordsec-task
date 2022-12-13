@@ -36,7 +36,7 @@
 ### Solution notes:
 
 #### Database
-I was considering SQL and NoSQL (key/value store) to store files info. Finally **Hybrid approach was used**
+I was considering SQL and NoSQL (key/value store) to store files info. Finally **Hybrid approach** with Redis is used
 
 #### SQL Database - MySQL
 The architecture is rather not complicated. All **distinct** file records are processed and stored in one table with following schema
@@ -48,7 +48,7 @@ In case of performance issue using different Database type might be considered a
 
 #### NoSQL solutions
 
-I was considering also NoSQL database which very often perform better in distributed environment and in most cases scale horizontally much easier than classical SQL DB. For this task I consider key/value store as a good solution.
+I was considering also NoSQL database which very often perform better in distributed environment and in most cases scale horizontally much easier than classical SQL DB. For this task I would consider key/value store as a good solution.
 
 #### Aerospike
 Aerospike was considered as it promises high efficiency, distributed (based on shared nothing architecture) database for storing key/value pairs. In commercial version it support pyspark distributed operations, direct import to RDDs etc. So if required it might give very good performance.
@@ -61,7 +61,11 @@ Open source, in-memory data store used as a database, cache, streaming engine, a
 The issue with in-memory key/value store is that it does not provide (by default) persistence of data.
 This can be achieved both in Redis and Aerospike of course but not by default.
 
-My idea is to provide hybrid solution in which processed files data is stored in classical SQL database but apart from that it is also imported into key/value store. In that case there is no need to load all existing entries into DataFrame prior to processing new entries just to make sure some files weren't already processed. Instead,  `filesDF` entries that exists in key/value store should be filtered during transformation. As a last steps  `filesDB`should be saved (appended) not only to SQL database but also to key/value store
+The idea is to provide hybrid solution in which processed files data is stored in classical SQL database but apart from that it is also imported into key/value store. In that case there is no need to load all existing entries into DataFrame prior to processing new entries just to make sure some files weren't already processed. Instead,  `filesDF` entries that exists in key/value store should be filtered during transformation. As a last steps  `filesDB`should be saved (appended) not only to SQL database but also to key/value store
+
+This solution is used finally with the not that already processed files are not filtered during `filesDF` transformations, but list of files from redis is read to dataframe prior to processing files and later this dataframe is substracted from `filesDF` to make sure files are not processed twice. This solution might not be optimal because it requires loading list of all processed files which might be huge. 
+
+ToDo: check redis entry per each file during transformation
 
 
 ### Getting files 
@@ -85,7 +89,7 @@ I was also considering one more approach, which however I could not find any goo
 `docker compose up`
 
 ## Run
-`spark-submit --files=src/config.yml --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1 src/process_pefiles.py 100`
+`spark-submit --files=src/config.yml --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1.0 src/process_pefiles.py 100`
 
 Note: number of files to process is the only argument of `process_pefiles.py` script
 
@@ -99,3 +103,9 @@ Note: number of files to process is the only argument of `process_pefiles.py` sc
   - process files to get appropriate meta
   - store in sql and redis
 
+
+## TODO:
+- CI/CD pipelines
+- get rid of boto3 from `s3file_reader.py`
+- propper logging
+- check redis entry per each file during transformation instead of getting all processed files into dataframe (see #### "hybrid" approach - caching)
