@@ -91,6 +91,10 @@ I was also considering one more approach, which however I could not find any goo
 `docker compose up`
 
 ## Run
+`spark-submit --verbose --files=config.yml  process_pefiles_pyspark.py --packages com.amazonaws:aws-java-sdk:1.11.901,org.apache.hadoop:hadoop-aws:3.3.1,mysql:mysql-connector-java:8.0.31,com.redislabs:spark-redis_2.12:3.1`
+TODO: missing jars packages
+
+## Jupyter Notebook
 - Run jupyter notebook on http://localhost:8888 (no token required)
 - Open and run /src/NordTask.ipynb in jupyter notebook
-
+- All steps required

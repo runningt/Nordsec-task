@@ -1,0 +1,25 @@
+app:
+  name: NORD_Task
+  num_of_files: 100
+
+
+spark:
+  master: "local[*]"
+  redis:
+    host: cache
+    port: 6379
+    table: files_info
+
+  sql:
+    url: "jdbc:mysql://db/nord_files"
+    table: files_info
+    username: root
+    password: "password"
+    driver: com.mysql.cj.jdbc.Driver
+
+s3:
+  bucket: s3-nord-challenge-data
+  region: eu-central-1
+  path:
+    clean: "/0/*.???"
+    malware: "/1/*.???"
